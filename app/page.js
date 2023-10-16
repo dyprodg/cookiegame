@@ -1,17 +1,20 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 
 export default function Home() {
   const [cookieCount, setCookieCount] = useState(0)
   const [clickPower, setClickPower] = useState(1)
   const upgradeCosts = [10, 50, 100]
+  const [currentTime, setCurrentTime] = useState(new Date ())
 
+  //clicks erhoehen dein Counter
   const handleClick = () => {
     setCookieCount(cookieCount + clickPower)
   }
 
+  //upgrades erhoehen clickpower
   const handleUpgrade = (cost) => {
     if (cookieCount >= cost) {
       setCookieCount(prevCount => prevCount - cost)
@@ -32,9 +35,25 @@ export default function Home() {
     }
   }
 
+  //setTime useEffect
+  useEffect(() => {
+    const IntervallId = setInterval(() => {
+    setCurrentTime(new Date ());
+  }, 1000)
+  return () => clearInterval(IntervallId);}, []);
+
+  //variable fuer formatierte Zeit
+  const formattedTime = currentTime.toLocaleTimeString('de-DE', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
+
   return (
     <div className='w-full h-screen'>
       <div className='flex flex-col justify-center items-center'>
+        <div>Aktuelle Uhrzeit: {formattedTime}</div>
         <h1 className='text-3xl m-10'>Cookie Clicker</h1>
         <div>
           <button onClick={handleClick}>
